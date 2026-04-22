@@ -1,0 +1,216 @@
+%! Author = matteomagnini
+%! Date = 22/04/26
+
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{my-acronyms}
+\usepackage{hyperref}
+
+\title{
+    Intelligent System 2\\
+    Tutorial week 9: Default Logics
+}
+
+\author{
+    Matteo Magnini\\
+    \href{mailto:matteo.magnini@uni.lu}{matteo.magnini@uni.lu}
+}
+
+\date{
+    23 April, 2026
+}
+
+\begin{document}
+
+\maketitle
+
+\section{Exercises}
+
+\subsection{Exercise 1: Encoding a Default Theory}
+
+Consider the following scenario:
+
+\begin{itemize}
+    \item Typically, students submit assignments on time.
+    \item Typically, busy people do not submit assignments on time.
+    \item Alice is a student.
+    \item Alice is busy.
+\end{itemize}
+
+Let the propositional variables be:
+\[
+student, \quad busy, \quad onTime
+\]
+
+\begin{enumerate}
+    \item Define the default theory $T = (F, D)$:
+    \begin{itemize}
+        \item Specify the set of facts $F$.
+        \item Specify the set of defaults $D$.
+    \end{itemize}
+
+    \item Assign a strength function $\text{str}: D \rightarrow \mathbb{N}$ assuming:
+    \[
+    \text{general traits} < \text{behavioral conditions}
+    \]
+
+    \item Intuitively: should Alice submit on time? Explain informally.
+\end{enumerate}
+
+\subsection{Exercise 2: Greedy Method (Step-by-Step)}
+
+Consider the default theory:
+
+\[
+F = \{ tired \}
+\]
+
+\[
+D =
+\begin{cases}
+d_1: \; \top \Rightarrow worker \\
+d_2: \; worker \Rightarrow productive \\
+d_3: \; tired \Rightarrow \neg productive
+\end{cases}
+\]
+
+with strengths:
+\[
+\text{str}(d_1) = 1, \quad \text{str}(d_2) = 2, \quad \text{str}(d_3) = 3
+\]
+
+\begin{enumerate}
+    \item Compute the Greedy construction:
+    \begin{itemize}
+        \item Step 0: $gr_0 = \emptyset$
+        \item At each step:
+        \begin{itemize}
+            \item list applicable defaults
+            \item select the strongest consistent one
+        \end{itemize}
+    \end{itemize}
+
+    \item Fill the table:
+
+    \begin{center}
+    \begin{tabular}{c|c|c}
+        step & $Cn(F \cup hd[gr_n])$ & selected default \\
+        \hline
+        0 & & \\
+        1 & & \\
+        2 & & \\
+    \end{tabular}
+    \end{center}
+
+    \item Give the final Greedy extension.
+\end{enumerate}
+
+\subsection{Exercise 3: Hansen Method}
+
+Use the same theory as in Exercise 2.
+
+\begin{enumerate}
+    \item Compute the Hansen construction:
+    \begin{itemize}
+        \item At each step, select the strongest \textbf{consistent} default
+        \item Note: it might not be applicable
+    \end{itemize}
+
+    \item Fill the table:
+
+    \begin{center}
+    \begin{tabular}{c|c|c}
+        step & $out(F, D_n)$ & selected default \\
+        \hline
+        0 & & \\
+        1 & & \\
+        2 & & \\
+    \end{tabular}
+    \end{center}
+
+    \item Which defaults are selected but never activated?
+
+    \item Compare the Hansen extension with the Greedy one.
+\end{enumerate}
+
+\subsection{Exercise 4: Brewka-Eiter Method}
+
+Consider again the theory from Exercise 2.
+
+\begin{enumerate}
+    \item Take the Greedy extension $S$.
+
+    \item Verify that $S$ is a Greedy extension of $T$.
+
+    \item Compute the reduction $T^S = (F \cup S, D^S, str^S)$:
+    \begin{itemize}
+        \item Define $D^S$
+        \item Assign strengths $str^S$
+    \end{itemize}
+
+    \item Compute the Greedy construction for $T^S$.
+
+    \item Is $S$ a Brewka-Eiter extension? Justify.
+\end{enumerate}
+
+\subsection{Exercise 5: Full Problem}
+
+Consider the following scenario:
+
+\begin{itemize}
+    \item Typically, artists are creative.
+    \item Typically, engineers are not creative.
+    \item Typically, creative people enjoy abstract art.
+    \item Bob is an artist.
+    \item Bob is an engineer.
+\end{itemize}
+
+Let:
+\[
+artist, \quad engineer, \quad creative, \quad abstract
+\]
+
+\begin{enumerate}
+    \item Define the default theory $T = (F, D, str)$ assuming:
+    \[
+    \text{profession stereotypes} < \text{cognitive traits}
+    \]
+
+    \item Compute the Greedy extension:
+    \begin{itemize}
+        \item show all steps
+    \end{itemize}
+
+    \item Compute the Hansen extension.
+
+    \item Guess a Brewka-Eiter candidate $S$.
+
+    \item Verify:
+    \begin{enumerate}
+        \item $S$ is Greedy for $T$
+        \item $S$ is Greedy for $T^S$
+    \end{enumerate}
+
+    \item Final question:
+    \begin{quote}
+        Does Bob enjoy abstract art?
+    \end{quote}
+    Justify using the different methods.
+\end{enumerate}
+
+\subsection{Exercise 6 (Optional, Conceptual)}
+
+Answer briefly:
+
+\begin{enumerate}
+    \item Why does the Greedy method sometimes produce more conclusions than Hansen?
+
+    \item Why can Hansen discard useful defaults?
+
+    \item What is the intuition behind Brewka-Eiter fixing this issue?
+
+\end{enumerate}
+
+\end{document}
