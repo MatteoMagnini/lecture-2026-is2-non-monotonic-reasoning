@@ -1,0 +1,146 @@
+%! Author = matteomagnini
+%! Date = 24/02/26
+
+% Preamble
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{my-acronyms}
+\usepackage{hyperref}
+
+\title{
+    Intelligent System 2\\
+    Tutorial week 2: First Order Logic
+}
+
+\author{
+    Matteo Magnini\\
+    \href{mailto:matteo.magnini@uni.lu}{matteo.magnini@uni.lu}
+}
+
+\date{
+    26 February, 2026
+}
+
+% Document
+\begin{document}
+
+    \maketitle
+
+    \subsection{Knowledge Representation: Exercise}
+    \label{subsec:knowledge-representation:-exercise}
+
+    Let $\mathcal{L}$ be the language with $\mathsf{Pred} = \{\text{Child\_of}_{(2)},\, \text{Male}_{(1)},\, \text{Female}_{(1)}\}$.
+    Expand $\mathcal{L}$ to include the predicates:
+
+    \textit{Parent\_of(2), Father\_of(2), Mother\_of(2), Sibling\_of(2), Uncle\_of(2), Grandma\_of(2), Cousin\_of(2)}.
+
+    Give a \ac{FOL} formula that defines each new predicate.
+    %
+    \[
+    \begin{array}{ll}
+    \forall x\, \forall y\;(\text{Parent\_of}(x, y) \leftrightarrow \text{Child\_of}(y, x)) \\
+    \forall x\, \forall y\;(\text{Father\_of}(x, y) \leftrightarrow \text{Parent\_of}(x, y) \wedge \text{Male}(x)) \\
+    \forall x\, \forall y\;(\text{Mother\_of}(x, y) \leftrightarrow \text{Parent\_of}(x, y) \wedge \text{Female}(x)) \\
+    \forall x\, \forall y\;(\text{Sibling\_of}(x, y) \leftrightarrow \exists p\, (\text{Parent\_of}(p, x) \wedge \text{Parent\_of}(p, y) \wedge x \not\approx y)) \\
+    \forall x\, \forall y\;(\text{Uncle\_of}(x, y) \leftrightarrow \exists p\, (\text{Parent\_of}(p, y) \wedge \text{Sibling\_of}(x, p) \wedge \text{Male}(x))) \\
+    \forall x\, \forall y\;(\text{Grandma\_of}(x, y) \leftrightarrow \exists p\, (\text{Parent\_of}(p, y) \wedge \text{Mother\_of}(x, p))) \\
+    \forall x\, \forall y\;(\text{Cousin\_of}(x, y) \leftrightarrow \exists p\, \exists q\, (\text{Parent\_of}(p, x) \wedge \text{Parent\_of}(q, y) \wedge \text{Sibling\_of}(p, q)))
+    \end{array}
+    \]
+
+    \textbf{Hint:} You can use predicates already defined when defining the theory for other predicates.
+
+    \section{Solutions}\label{sec:solutions}
+
+    \subsection{Solution to Exercise 1}\label{subsec:solution-to-exercise-1}
+
+    \begin{enumerate}
+        \item \textbf{Interpretation of the terms:}
+        \begin{enumerate}
+            \item $f(f(b))$:
+            \begin{itemize}
+                \item $b^\mathcal{M} = \square$
+                \item $f^\mathcal{M}(\square) = \triangledown$
+                \item $f^\mathcal{M}(\triangledown) = \lozenge$
+                \item \textbf{Result:} $(f(f(b)))^\mathcal{M} = \lozenge$
+            \end{itemize}
+            \item $R(a, f(b))$:
+            \begin{itemize}
+                \item $a^\mathcal{M} = \triangle$
+                \item $f^\mathcal{M}(b^\mathcal{M}) = f^\mathcal{M}(\square) = \triangledown$
+                \item $R^\mathcal{M}$ contains $(\triangle, \triangledown)$
+                \item \textbf{Result:} $R(a, f(b))^\mathcal{M} = \text{true}$
+            \end{itemize}
+            \item $R(f(a), f(f(b)))$:
+            \begin{itemize}
+                \item $f^\mathcal{M}(a^\mathcal{M}) = f^\mathcal{M}(\triangle) = \square$
+                \item $f(f(b))^\mathcal{M} = \lozenge$
+                \item $R^\mathcal{M}$ contains $(\square, \lozenge)$
+                \item \textbf{Result:} $R(f(a), f(f(b)))^\mathcal{M} = \text{true}$
+            \end{itemize}
+        \end{enumerate}
+
+        \item \textbf{Are the following formulas satisfied in $\mathcal{M}$? Justify briefly.}
+        \begin{enumerate}
+            \item $R(a, f(b))$
+            \begin{itemize}
+                \item $a^\mathcal{M} = \triangle$, $f(b)^\mathcal{M} = \triangledown$
+                \item $(\triangle, \triangledown) \in R^\mathcal{M}$
+                \item \textbf{Result:} Satisfied (True)
+            \end{itemize}
+            \item $R(f(f(f(a))), f(b))$
+            \begin{itemize}
+                \item $f(a) = \square$, $f(f(a)) = \triangledown$, $f(f(f(a))) = \lozenge$
+                \item $f(b) = \triangledown$
+                \item $(\lozenge, \triangledown) \notin R^\mathcal{M}$
+                \item \textbf{Result:} Not satisfied (False)
+            \end{itemize}
+            \item $\forall x_1\; (f(f(f(f(x_1)))) \approx x_1)$
+            \begin{itemize}
+                \item For all $m \in M$, $f(f(f(f(m)))) = m$ because $f$ is a permutation of order 4.
+                \item \textbf{Result:} Satisfied (True)
+            \end{itemize}
+        \end{enumerate}
+    \end{enumerate}
+
+    \subsection{Solution to Exercise 2}\label{subsec:solution-to-exercise-2}
+
+    Provide a model and a counter-model for the following formulas:
+
+    \begin{enumerate}
+        \item $\forall x\,((P(x, b) \wedge Q(x)) \rightarrow R(x, a))$\\
+        \textbf{Answer:}
+        \begin{itemize}
+            \item \textit{Model:}
+            $\mathcal{M} = (\{1\};\ a^\mathcal{M} = 1;\ b^\mathcal{M} = 1;\ R^\mathcal{M} = \{\langle 1, 1 \rangle\};\ P^\mathcal{M} = \emptyset;\ Q^\mathcal{M} = \emptyset)$
+            \item \textit{Counter-model:}
+            $\mathcal{M} = (\{1\};\ a^\mathcal{M} = 1;\ b^\mathcal{M} = 1;\ P^\mathcal{M} = \{\langle 1, 1 \rangle\};\ Q^\mathcal{M} = \{1\};\ R^\mathcal{M} = \emptyset)$
+        \end{itemize}
+
+        \item $\forall y\,(\exists x\ (R(a, x) \rightarrow (P(y, x) \wedge Q(y))))$\\
+        \textbf{Answer:}
+        \begin{itemize}
+            \item \textit{Model:}
+            $\mathcal{M} = (\{1\};\ a^\mathcal{M} = 1;\ P^\mathcal{M} = \{\langle 1, 1 \rangle\};\ Q^\mathcal{M} = \{1\};\ R^\mathcal{M} = \emptyset)$
+            \item \textit{Counter-model:}
+            $\mathcal{M} = (\{1\};\ a^\mathcal{M} = 1;\ R^\mathcal{M} = \{\langle 1, 1 \rangle\};\ P^\mathcal{M} = \emptyset;\ Q^\mathcal{M} = \emptyset)$
+        \end{itemize}
+    \end{enumerate}
+
+    \subsection{Solution to Exercise 3}\label{subsec:solution-to-exercise-3}
+
+    \begin{enumerate}
+        \item $\forall x\, (\text{Ostrich}(x) \rightarrow (\text{Bird}(x) \wedge \neg \text{Fly}(x) \wedge \text{Wings}(x)))$\\[1ex]
+        ``All ostriches are birds, do not fly, and have wings.''
+
+        \item $\forall x\, \forall y\, ((\text{Wolf}(x) \wedge \text{Deer}(y)) \rightarrow \text{Hunts}(x, y))$\\[1ex]
+        ``Every wolf hunts every deer.''
+
+        \item $\forall x\, ((\text{Boat}(x) \wedge \text{Floats}(x, \text{Pacific})) \rightarrow (\neg\text{Leaky}(x) \wedge \exists y\, (\text{Crewed}(x, y))))$\\[1ex]
+        ``Every boat that floats in the Pacific is not leaky and is crewed by at least one person.''
+    \end{enumerate}
+
+\end{document}
